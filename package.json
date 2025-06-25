@@ -12,6 +12,7 @@
   "dependencies": {
     "@formspree/react": "^3.0.0",
     "framer-motion": "^10.16.1",
+    "lucide-react": "^0.523.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.23.0"
@@ -19,6 +20,7 @@
   "devDependencies": {
     "@vitejs/plugin-react": "^4.0.0",
     "autoprefixer": "^10.4.14",
+    "cross-env": "^7.0.3",
     "gh-pages": "^6.3.0",
     "postcss": "^8.4.24",
     "tailwindcss": "^3.3.3",

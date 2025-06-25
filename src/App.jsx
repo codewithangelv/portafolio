@@ -1,26 +1,26 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
 import NavMenu from "./components/NavMenu";
-import Projects from "./pages/Projects";
-import Services from "./pages/Services";
+import Footer from "./components/Footer";
+import Home from "./pages/Home";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
+import Projects from "./pages/Projects";
 
 function App() {
   return (
     <Router>
-      <div className="flex bg-[#0e0e0e] min-h-screen text-white">
+      <div className="flex flex-col min-h-screen">
         <NavMenu />
-        <div className="flex-1 p-4">
+        <main className="flex-grow">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/projects" element={<Projects />} />
-            <Route path="/services" element={<Services />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/projects" element={<Projects />} />
           </Routes>
-        </div>
+        </main>
+        <Footer />
       </div>
     </Router>
   );
