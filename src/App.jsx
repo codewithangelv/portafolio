@@ -6,13 +6,15 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Projects from "./pages/Projects";
+import StarsBackground from "./components/StarsBackground";
 
 function App() {
   return (
     <Router>
-      <div className="flex flex-col min-h-screen">
+      <div className="relative min-h-screen flex flex-col bg-[#20232a] text-white overflow-x-hidden">
+        <StarsBackground />
         <NavMenu />
-        <main className="flex-grow">
+        <main className="flex-grow z-10 relative">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />

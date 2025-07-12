@@ -1,94 +1,105 @@
-// src/pages/Projects.jsx
 import React from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import ventasImg from "../assets/ventas.png";
-import prestamosImg from "../assets/prestamos.png";
-import excelImg from "../assets/excel.png";
-import venusImg from "../assets/venus.png";
-
-const projects = [
-  {
-    title: "Sistema de Ventas",
-    description:
-      "Gestión completa de productos, ventas, impresión de tickets, e informes contables. Arquitectura en capas con impresión ESC/POS.",
-    tech: ["C#", "SQL Server", "WinForms"],
-    image: ventasImg,
-    github: "#",
-  },
-  {
-    title: "Gestor de Préstamos",
-    description:
-      "Seguimiento de clientes, pagos, intereses, amortización e historial. Interfaz clara y práctica.",
-    tech: ["C#", "SQL Server", "WinForms"],
-    image: prestamosImg,
-    github: "#",
-  },
-  {
-    title: "Automatizaciones en Excel VBA",
-    description:
-      "Reportes contables automatizados, balance general, estado de resultados, diario y mayor con formularios.",
-    tech: ["Excel", "VBA"],
-    image: excelImg,
-    github: "#",
-  },
-  {
-    title: "Asistente Virtual Venus",
-    description:
-      "Reconocimiento de voz, control por comandos, integración con APIs y visualización animada. Proyecto en desarrollo.",
-    tech: ["Python", "edge-tts", "PySide6"],
-    image: venusImg,
-    github: "#",
-  },
-];
+import { supabase } from "../supabaseClient";
 
 const Projects = () => {
+  const [projects, setProjects] = useState([]);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      const { data, error } = await supabase.from("projects").select("*");
+      if (error) {
+        console.error("Error fetching projects:", error);
+      } else {
+        setProjects(data);
+      }
+    };
+
+    fetchProjects();
+  }, []);
+
   return (
-    <div className="px-4">
-      <h1 className="text-3xl font-bold mb-6 text-purple-400">Mis Proyectos</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {projects.map((project, index) => (
-          <motion.div
-            key={index}
-            className="bg-[#1c1c1c] p-4 rounded-xl shadow-lg hover:shadow-purple-500/30 transition cursor-pointer"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.2, duration: 0.5 }}
-            whileHover={{ scale: 1.02 }}
-          >
-            <motion.img
-              src={project.image}
-              alt={project.title}
-              className="h-28 w-auto mx-auto mb-4 rounded shadow-md"
-              whileHover={{ scale: 1.05, filter: "brightness(1.2)" }}
-              transition={{ duration: 0.3 }}
-            />
-            <h2 className="text-xl font-semibold text-white mb-2">
-              {project.title}
-            </h2>
-            <p className="text-gray-300 mb-2">{project.description}</p>
-            <div className="flex flex-wrap gap-2 text-sm mb-3">
-              {project.tech.map((tech, i) => (
-                <span
-                  key={i}
-                  className="bg-purple-700 text-white px-2 py-1 rounded-full"
-                >
-                  {tech}
-                </span>
-              ))}
-            </div>
-            <a
-              href={project.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-purple-400 hover:underline"
+    <div className="relative bg-[#20232a] min-h-screen overflow-hidden text-white px-4 py-16 md:px-12">
+      <div className="absolute inset-0 -z-10 bg-black">
+        <div className="absolute w-[2px] h-[2px] bg-white rounded-full animate-twinkle left-[10%] top-[20%] opacity-50"></div>
+        <div className="absolute w-[2px] h-[2px] bg-white rounded-full animate-twinkle left-[40%] top-[60%] opacity-60"></div>
+        <div className="absolute w-[2px] h-[2px] bg-white rounded-full animate-twinkle left-[70%] top-[30%] opacity-40"></div>
+        <div className="absolute w-[2px] h-[2px] bg-white rounded-full animate-twinkle left-[80%] top-[80%] opacity-70"></div>
+      </div>
+
+      <motion.h2
+        className="text-4xl md:text-5xl font-bold text-[#61dafb] mb-12 relative z-10"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+      >
+        Mis Proyectos
+      </motion.h2>
+
+      <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 relative z-10">
+        {Array.isArray(projects) &&
+          projects.map((project, index) => (
+            <motion.div
+              key={index}
+              className="bg-[#282c34] rounded-xl p-6 border border-[#61dafb33] shadow-md hover:shadow-[0_0_16px_#61dafb66] hover:scale-[1.02] transition-all duration-300"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.15 }}
             >
-              Ver en GitHub
-            </a>
-          </motion.div>
-        ))}
+              <img
+                src={project.image_url}
+                alt={project.title}
+                className="w-16 h-16 mb-4 object-contain"
+              />
+              <h3 className="text-xl font-semibold text-[#61dafb] mb-2">
+                {project.title}
+              </h3>
+              <p className="text-gray-300 mb-4 text-sm leading-relaxed">
+                {project.description}
+              </p>
+              <div className="flex flex-wrap gap-2 mb-3">
+                {typeof project.tags === "string"
+                  ? project.tags.split(",").map((tag, i) => (
+                      <span
+                        key={i}
+                        className="bg-[#61dafb] text-[#20232a] px-3 py-1 rounded-full text-xs font-medium"
+                      >
+                        {tag.trim()}
+                      </span>
+                    ))
+                  : Array.isArray(project.tags) &&
+                    project.tags.map((tag, i) => (
+                      <span
+                        key={i}
+                        className="bg-[#61dafb] text-[#20232a] px-3 py-1 rounded-full text-xs font-medium"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+              </div>
+              <a
+                href={project.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#61dafb] hover:underline text-sm"
+              >
+                Ver en GitHub
+              </a>
+            </motion.div>
+          ))}
       </div>
     </div>
   );
 };
 
 export default Projects;
+
+// 👇 Agrega esto en tu index.css o tailwind.css
+// @keyframes twinkle {
+//   0%, 100% { opacity: 0.2; transform: scale(1); }
+//   50% { opacity: 0.8; transform: scale(1.2); }
+// }
+// .animate-twinkle {
+//   animation: twinkle 2s ease-in-out infinite;
+// }
